@@ -1,0 +1,26 @@
+site_name: pystreng
+site_description: Minimal documentation site for pystreng
+nav:
+nav:
+  - Home: index.md
+  - API: api.md
+  - Shear function: shear.md
+
+theme:
+  name: material
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python: {}
+
+markdown_extensions:
+  - toc
+  - tables
+  - fenced_code
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js

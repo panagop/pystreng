@@ -13,5 +13,27 @@ dependencies = []
 requires = ["uv_build>=0.8.18,<0.9.0"]
 build-backend = "uv_build"
 
+[project.optional-dependencies]
+# Developer extras installed with uv in developer/editable mode: `uv install -e '.[dev]'`
+dev = [
+    "ruff",
+    "pytest",
+    "build",
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocstrings",
+    "numpydoc",
+    "docformatter",
+    "pydocstyle",
+]
+
+[tool.ruff]
+line-length = 88
+
+[tool.docformatter]
+wrap-summaries = true
+wrap-descriptions = true
+
+
 
 
