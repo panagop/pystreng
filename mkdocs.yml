@@ -1,6 +1,9 @@
 site_name: pystreng
 site_description: Minimal documentation site for pystreng
-nav:
+site_url: https://panagop.github.io/pystreng
+repo_url: https://github.com/panagop/pystreng
+use_directory_urls: true
+
 nav:
   - Home: index.md
   - API: api.md
