@@ -1,26 +1,51 @@
-name: docs
+name: Deploy static content to Pages
 
 on:
   push:
-    branches:
-      - master
+    branches: ["master"]
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.x
-      - uses: actions/cache@v3
-        with:
-          key: ${{ github.ref }}
-          path: .cache
-      - run: |
+          python-version: '3.12'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
           pip install mkdocs-material mkdocstrings mkdocstrings-python
           pip install -e ".[dev]"
-      - run: mkdocs gh-deploy --force
+          
+      - name: Build
+        run: mkdocs build
+        
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+        
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: 'site'
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
