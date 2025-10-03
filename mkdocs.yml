@@ -4,7 +4,10 @@ site_url: https://panagop.github.io/pystreng
 repo_url: https://github.com/panagop/pystreng
 repo_name: panagop/pystreng
 edit_uri: edit/master/docs/
-use_directory_urls: false
+docs_dir: docs
+site_dir: site
+use_directory_urls: true
+strict: true
 
 nav:
   - Home: index.md
@@ -14,8 +17,12 @@ nav:
 theme:
   name: material
   features:
+    - navigation.instant
+    - navigation.tracking
     - navigation.sections
-    - navigation.top
+    - navigation.expand
+    - navigation.indexes
+    - toc.follow
     - search.suggest
     - search.highlight
   palette:
