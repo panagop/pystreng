@@ -1,13 +1,39 @@
 site_name: pystreng
-site_description: Minimal documentation site for pystreng
-site_url: https://panagop.github.io/pystreng
-repo_url: https://github.com/panagop/pystreng
-repo_name: panagop/pystreng
-edit_uri: edit/master/docs/
-docs_dir: docs
-site_dir: site
-use_directory_urls: true
-strict: true
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - search.suggest
+
+nav:
+  - Home: index.md
+  - API: api.md
+  - Shear: shear.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: true
+            show_root_heading: true
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
 nav:
   - Home: index.md

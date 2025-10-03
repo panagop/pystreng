@@ -1,36 +1,19 @@
-name: Deploy MkDocs documentation
-
+name: Documentation
 on:
   push:
-    branches: 
+    branches:
       - master
       - main
-
 permissions:
   contents: write
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
-          
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install mkdocs mkdocs-material mkdocstrings mkdocstrings-python pymdown-extensions
-          python -m pip install -e ".[dev]"
-          
-      - name: Configure Git credentials
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-      - name: Deploy documentation
-        run: mkdocs gh-deploy --force
+          python-version: 3.12
+      - run: pip install mkdocs-material mkdocstrings mkdocstrings-python
+      - run: pip install -e ".[dev]"
+      - run: mkdocs gh-deploy --force
