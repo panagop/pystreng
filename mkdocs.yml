@@ -1,46 +1,34 @@
 site_name: pystreng
-site_url: https://panagop.github.io/pystreng
-repo_url: https://github.com/panagop/pystreng
-repo_name: pystreng
 
 theme:
   name: material
-  logo: assets/images/favicon.svg
-  favicon: assets/images/favicon.svg
-  icon:
-    repo: fontawesome/brands/github
-  features:
-    - navigation.instant
-    - navigation.tracking
-    - navigation.tabs
-    - navigation.sections
-    - navigation.indexes
-    - navigation.top
-    - toc.follow
-    - search.suggest
-    - search.highlight
-  font:
-    text: Roboto
-    code: Roboto Mono
-  palette:
-    - scheme: default
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    - scheme: slate
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/brightness-4
-        name: Switch to light mode
 
-extra:
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/panagop/pystreng
-      name: pystreng on GitHub
+nav:
+  - Home: index.md
+  - API Reference:
+    - Overview: api.md
+    - Shear Calculations: shear.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_source: true
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
 nav:
   - Home: index.md
