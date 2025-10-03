@@ -1,0 +1,34 @@
+/* Custom styles for better readability */
+.md-typeset {
+    font-size: .7rem;
+    line-height: 1.6;
+}
+
+.md-typeset h1 {
+    color: var(--md-primary-fg-color);
+}
+
+/* Improve code block readability */
+.md-typeset code {
+    font-size: .85em;
+}
+
+/* Better spacing for function signatures */
+.doc-heading {
+    margin-top: 2em !important;
+}
+
+/* Style mathematical equations */
+.arithmatex {
+    font-size: 1.1em;
+    margin: 1em 0;
+}
+
+/* Improve navigation readability */
+.md-nav__link {
+    color: var(--md-typeset-color);
+}
+
+.md-nav__link:hover {
+    color: var(--md-accent-fg-color);
+}
