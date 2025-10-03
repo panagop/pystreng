@@ -1,22 +1,46 @@
 site_name: pystreng
+site_url: https://panagop.github.io/pystreng
 repo_url: https://github.com/panagop/pystreng
+repo_name: pystreng
 
 theme:
   name: material
-  language: en
+  logo: assets/images/favicon.svg
+  favicon: assets/images/favicon.svg
+  icon:
+    repo: fontawesome/brands/github
   features:
-    - content.code.annotate
-    - content.tabs.link
-    - navigation.expand
-    - navigation.indexes
     - navigation.instant
-    - navigation.sections
+    - navigation.tracking
     - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
     - navigation.top
-    - search.highlight
-    - search.share
-    - search.suggest
     - toc.follow
+    - search.suggest
+    - search.highlight
+  font:
+    text: Roboto
+    code: Roboto Mono
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/panagop/pystreng
+      name: pystreng on GitHub
 
 nav:
   - Home: index.md
