@@ -6,16 +6,15 @@ nav:
   - API: api.md
   - Codes:
     - Eurocode 2:
-      - Shear function: shear.md
+      - Shear function: codes/eurocode2/shear.md
     - Eurocode 3:
-      - Shear function: shear3.md
+      - Shear function: codes/eurocode3/shear.md
 
 theme:
   name: material
   features:
     - navigation.instant
     - navigation.tracking
-    - navigation.sections
     - navigation.indexes
     - toc.follow
     - search.suggest

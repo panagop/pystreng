@@ -37,7 +37,7 @@ print(f"VRdmax = {result:.2f} N")
 ## Documentation
 
 - [API Reference](api.md): Detailed documentation of all functions and classes
-- [Shear Calculations](shear.md): Detailed explanation of shear resistance calculations
+- [Shear Calculations](codes/eurocode2/shear.md): Detailed explanation of shear resistance calculations
 
 ## Development
 
