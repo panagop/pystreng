@@ -42,9 +42,11 @@ def VRdmax(
         ValueError: If an unsupported `units` string is provided.
 
     Notes:
-        The expression used is::
+        The expression used is:
 
-            V_{Rd,max} = α_cw * b_w * z * ν_1 * f_cd / (cot θ + tan θ)
+        \\[
+        V_{Rd,max} = \\frac{\\alpha_{cw} \\cdot b_w \\cdot z \\cdot \\nu_1 \\cdot f_{cd}}{\\cot\\theta + \\tan\\theta}
+        \\]
 
     Example:
         >>> import numpy as np
