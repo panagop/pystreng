@@ -4,7 +4,11 @@ site_url: https://panagop.github.io/pystreng/
 nav:
   - Home: index.md
   - API: api.md
-  - Shear function: shear.md
+  - Codes:
+    - Eurocode 2:
+      - Shear function: shear.md
+    - Eurocode 3:
+      - Shear function: shear3.md
 
 theme:
   name: material
@@ -12,7 +16,6 @@ theme:
     - navigation.instant
     - navigation.tracking
     - navigation.sections
-    - navigation.expand
     - navigation.indexes
     - toc.follow
     - search.suggest

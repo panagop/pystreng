@@ -93,3 +93,96 @@ def VRdmax(
     if include_intermediates:
         return intermediates
     return intermediates["value"]
+
+
+def VRdc(
+    CRdc: float,
+    Asl: float,
+    fck: float,
+    σcp: float,
+    bw: float,
+    d: float,
+    units: str = 'N-mm'
+) -> Dict[str, float]:
+    """Compute the design value for the shear resistance V_Rd,c.
+
+    Units are 'N-mm', unless specified otherwise. Alternative options are: 'kN-m'
+
+    Example:
+        ```python
+        vrdc = VRdc(CRdc=0.12,
+                    Asl=308,
+                    fck=20.,
+                    σcp=0.66667,
+                    bw=250.,
+                    d=539.,
+                    units='N-mm')
+        ```
+
+    Args:
+        CRdc: 0.18/γc coefficient.
+        Asl: Area of the tensile reinforcement [mm²].
+        fck: Characteristic concrete strength [N/mm²].
+        σcp: Concrete compressive stress σ_cp=N_Ed/A_c < 0.2f_cd [N/mm²].
+        bw: Smallest width of the cross-section in the tensile area [mm].
+        d: Effective depth of the cross-section [mm].
+        units: Unit system, one of 'N-mm' (default) or 'kN-m'.
+
+    Returns:
+        Dictionary containing intermediate values and the final result in [N], 
+        unless specified otherwise. Intermediate results are always 'N-mm'.
+
+    Notes:
+        The expressions used are:
+
+        \\[
+        V_{Rd,c} = \\max \\left\\{\\begin{matrix}
+        [C_{Rd,c} \\cdot k \\cdot(100\\cdot \\rho_l\\cdot f_{ck})^{1/3} + k_1 \\cdot \\sigma_{cp}] \\cdot b_w \\cdot d \\\\
+        (v_{min} + k_1 \\cdot \\sigma_{cp}) \\cdot b_w \\cdot d
+        \\end{matrix}\\right.
+        \\]
+
+        where:
+
+        - \\(k=1 + \\sqrt{\\frac{200}{d}} \\leq 2.0\\)
+        - \\(\\rho_l=\\frac{A_{sl}}{b_w \\cdot d} \\leq 0.02\\)
+        - \\(k_1 = 0.15\\)
+
+    """
+    _VRdc = {}
+
+    if units == 'N-mm':
+        pass
+    elif units == 'kN-m':
+        Asl = Asl * 10 ** 6
+        fck *= 0.001
+        σcp *= 0.001
+        bw *= 1000
+        d *= 1000
+    else:
+        pass
+
+    ρl = min(Asl / (bw * d), 0.02)
+    k = min(1 + (200.0 / d) ** 0.5, 2.0)
+    vmin = 0.035 * k ** 1.5 * fck ** 0.5
+    k1 = 0.15
+
+    VRdc1 = (CRdc * k * math.pow((100 * ρl * fck), (1 / 3)) + k1 * σcp) * bw * d
+    VRdc2 = (vmin + k1 * σcp) * bw * d
+
+    _VRdc['ρl'] = ρl
+    _VRdc['k'] = k
+    _VRdc['vmin'] = vmin
+    _VRdc['k1'] = k1
+    _VRdc['VRdc1'] = VRdc1
+    _VRdc['VRdc2'] = VRdc2
+    _VRdc['value'] = max(VRdc1, VRdc2)
+
+    if units == 'N-mm':
+        pass
+    elif units == 'kN-m':
+        _VRdc['value'] *= 0.001
+    else:
+        pass
+
+    return _VRdc
