@@ -1,6 +1,5 @@
 import math
 from typing import Dict, Union
-import numpy as np
 
 def VRdmax(
     bw: float,
