@@ -47,6 +47,9 @@ plugins:
             show_source: true
             show_root_heading: true
             show_category_heading: true
+            docstring_section_style: table
+            members_order: source
+            show_signature_annotations: true
 
 markdown_extensions:
   - toc

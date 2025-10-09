@@ -48,8 +48,11 @@ def VRdmax(
         \\]
 
     Example:
-        >>> import numpy as np
-        >>> VRdmax(250., 539., 20., 500., 500., np.pi/4)
+        ```python
+        import math
+        result = VRdmax(250., 539., 20., 500., 500., math.pi/4)
+        print(result)  # 150000.0
+        ```
 
     """
     if units not in ("N-mm-rad", "kN-m-rad"):
