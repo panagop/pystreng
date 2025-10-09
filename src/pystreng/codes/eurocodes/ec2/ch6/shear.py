@@ -1,5 +1,66 @@
 import math
+from dataclasses import dataclass
 from typing import Dict, Union
+
+@dataclass(frozen=True)
+class VRdmaxResult:
+    # Inputs
+    bw: float
+    d: float
+    fck: float
+    fyk: float
+    fywk: float
+    θ: float
+    αcw: float
+    γc: float
+    units: str
+    # Outputs
+    value: float
+    z: float
+    fcd: float
+    v1: float
+    tanθ: float
+    cotθ: float
+
+    def to_latex(self, show_inputs: bool = True, with_steps: bool = True, decimals: int = 3) -> str:
+        """Return a LaTeX string for V_Rd,max formula and results."""
+        def q(x: float) -> str:
+            return f"{x:.{decimals}f}"
+        V_unit = "N" if self.units == "N-mm-rad" else "kN"
+        L_unit = "mm" if self.units == "N-mm-rad" else "m"
+        f_unit = "N/mm^2"
+
+        inputs = (
+            "$$" +
+            rf"\begin{{array}}{{l l}}"
+            rf"b_w = {q(self.bw)}~\mathrm{{{L_unit}}} & d = {q(self.d)}~\mathrm{{{L_unit}}} \\ "
+            rf"f_{{ck}} = {q(self.fck)}~\mathrm{{{f_unit}}} & f_{{yk}} = {q(self.fyk)}~\mathrm{{{f_unit}}} \\ "
+            rf"f_{{ywk}} = {q(self.fywk)}~\mathrm{{{f_unit}}} & \theta = {q(self.θ)}~\mathrm{{rad}} \\ "
+            rf"\alpha_{{cw}} = {q(self.αcw)} & \gamma_c = {q(self.γc)}"
+            r"\end{array}$$" 
+        ) if show_inputs else ""
+
+        
+        # Optional intermediate values
+        inter = (
+            "$$" +
+            rf"\begin{{array}}{{l l}}"
+            rf"z = {q(self.z)}~\mathrm{{{L_unit}}} & "
+            rf"f_{{cd}} = {q(self.fcd)}~\mathrm{{{f_unit}}} \\ "
+            rf"\nu_1 = {q(self.v1)} & "
+            rf"\tan\theta = {q(self.tanθ)},~\cot\theta = {q(self.cotθ)}"
+            r"\end{array}$$" 
+        ) if with_steps else ""
+
+        # Core expression
+        expr = (
+            r"\begin{align}"
+            r"V_{Rd,\max} &= \frac{\alpha_{cw} \cdot b_w \cdot z \cdot \nu_1 \cdot f_{cd}}{\cot\theta + \tan\theta}\\[3pt]"
+            rf"&= {q(self.value)}~\text{{{V_unit}}}"
+            r"\end{align}"
+        )
+        return "\n".join([x for x in [inputs, inter, expr] if x])
+
 
 def VRdmax(
     bw: float,
@@ -12,8 +73,8 @@ def VRdmax(
     γc: float = 1.5,
     units: str = "N-mm-rad",
     include_intermediates: bool = False,
-) -> Union[float, Dict[str, float]]:
-    """Compute the maximum shear resistance V_Rd,max.
+) -> float | VRdmaxResult:
+    """Compute the maximum shear resistance V_Rd,max according to Eurocode 2.
 
     The function computes the design shear resistance V_Rd,max. Inputs are expected in
     millimetres and N/mm² when `units` is 'N-mm-rad' (the default). If `units` is
@@ -56,45 +117,25 @@ def VRdmax(
 
     """
     if units not in ("N-mm-rad", "kN-m-rad"):
-        raise ValueError(f"Unsupported units: {units!r}. Use 'N-mm-rad' or 'kN-m-rad'.")
+        raise ValueError("units must be 'N-mm-rad' or 'kN-m-rad'")
 
-    # Work in consistent base units (N-mm-rad) for intermediates
-    bw_work = float(bw)
-    d_work = float(d)
-    fck_work = float(fck)
-    fyk_work = float(fyk)
-    fywk_work = float(fywk)
+    # Normalize units
+    sL = 1000.0 if units == "kN-m-rad" else 1.0
+    sF = 0.001 if units == "kN-m-rad" else 1.0
+    bw_, d_ = bw * sL, d * sL
+    fck_, fyk_, fywk_ = fck * sF, fyk * sF, fywk * sF
 
+    # Core calculations
+    z = 0.9 * d_
+    fcd = fck_ / γc
+    v1 = (0.6 if fywk_ < 0.8 * fyk_ else 0.6 * (1 - fck_ / 250.0))
+    tanθ, cotθ = math.tan(θ), 1 / math.tan(θ)
+    value = αcw * bw_ * z * v1 * fcd / (tanθ + cotθ)
     if units == "kN-m-rad":
-        # convert kN-m to N-mm where appropriate: 1 kN = 1000 N, 1 m = 1000 mm
-        bw_work *= 1000.0
-        d_work *= 1000.0
-        fck_work *= 0.001
-        fyk_work *= 0.001
-        fywk_work *= 0.001
-
-    z = 0.9 * d_work
-    fcd = fck_work / γc
-
-    if fywk_work < 0.8 * fyk_work:
-        if fck_work <= 60:
-            v1 = 0.6
-        else:
-            v1 = max(0.5, 0.9 - fck_work / 200.0)
-    else:
-        v1 = 0.6 * (1.0 - fck_work / 250.0)
-
-    value = αcw * bw_work * z * v1 * fcd / (math.tan(θ) + 1.0 / math.tan(θ))
-
-    if units == "kN-m-rad":
-        # convert back to kN-m units for the returned value
         value *= 0.001
 
-    intermediates = {"z": z, "fcd": fcd, "v1": v1, "value": value}
-
-    if include_intermediates:
-        return intermediates
-    return intermediates["value"]
+    res = VRdmaxResult(bw, d, fck, fyk, fywk, θ, αcw, γc, units, value, z, fcd, v1, tanθ, cotθ)
+    return res if include_intermediates else res.value
 
 
 def VRdc(
