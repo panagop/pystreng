@@ -8,8 +8,6 @@ nav:
   - Codes:
     - Eurocode 2:
       - Shear function: codes/eurocode2/shear.md
-    - Eurocode 4:
-      - Shear function: codes/eurocode3/shear.md
 
 theme:
   name: material

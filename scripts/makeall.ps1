@@ -37,6 +37,8 @@ if ($null -ne $uv) {
     ExecIfExists 'python' '-m build'
 }
 
+# Set environment variable to suppress Jupyter platform dirs deprecation warning
+$env:JUPYTER_PLATFORM_DIRS = 1
 ExecIfExists 'mkdocs' 'build'
 
 Write-Host "Done"
